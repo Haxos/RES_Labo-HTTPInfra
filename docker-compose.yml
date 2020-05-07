@@ -1,0 +1,28 @@
+version: '3'
+
+networks: 
+    backend:
+    frontend:
+
+services: 
+    apache:
+        build: ./docker-images/apache
+        container_name: 'apache'
+        ports:
+            - "8080:80"
+        depends_on: 
+            - php-fpm
+        networks: 
+            - backend
+            - frontend
+        volumes:
+            - ./public:/var/www/html
+    php-fpm:
+        build: ./docker-images/php-fpm
+        container_name: 'php-fpm'
+        ports: 
+            - "9000:9000"
+        networks: 
+            - backend
+        volumes:
+            - ./public:/var/www/html
