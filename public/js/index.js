@@ -1,5 +1,10 @@
-var Chance = require('chance');
+import Express from 'express';
+import Chance from 'chance';
 var chance = new Chance();
 
+const app = Express()
+const port = 3000
 
-console.log("Hello " + chance.name());
+app.get('/', (req, res) => res.send('Hello World!'))
+
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))

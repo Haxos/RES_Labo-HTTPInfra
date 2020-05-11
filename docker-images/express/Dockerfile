@@ -4,4 +4,6 @@ ENV DIRPATH /opt/app
 
 VOLUME ${DIRPATH}
 
+EXPOSE 3000
+
 CMD node ${DIRPATH}/index.js
