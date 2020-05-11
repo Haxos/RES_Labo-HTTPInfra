@@ -29,6 +29,8 @@ services:
     express:
         build: ./docker-images/express
         container_name: 'express'
+        ports: 
+            - "3000:3000"
         networks: 
             - backend
         volumes: 
