@@ -33,3 +33,10 @@ services:
             - backend
         volumes:
             - ./public:/var/www/html
+    express:
+        build: ./docker-images/express
+        container_name: 'express'
+        networks: 
+            - backend
+        volumes: 
+            - ./public/js:/opt/app 
