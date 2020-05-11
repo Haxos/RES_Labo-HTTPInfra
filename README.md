@@ -9,6 +9,9 @@ For this lab, we decided to use php-fpm so we can run php in a different contain
 This environment allows easier performance scaling (load-balancing from a single web server across multiple php servers for example) as well as the ability to swap the web server for something like nginx.
 This also makes building images faster because if we change an apache configuration, we don't need to rebuild the php image.
 
+Because we need to use different containers, we decided to use docker-compose to ease the use of launch for many containers with all the ports and volumes bindings.
+To run the different containers, we use the commandline `docker-compose up -d` and for shuting down all the container, we use `docker-compose down`.
+
 ### Apache
 Get a default apache httpd.conf : `docker run --rm httpd:2.4 cat /usr/local/apache2/conf/httpd.conf > docker-images/apache/httpd.conf`
 
