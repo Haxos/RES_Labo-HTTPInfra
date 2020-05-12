@@ -1,6 +1,13 @@
 import Chance from 'chance'
 export default {
-    generateTransaction() {
+
+    /**
+     * Generate between 5 and 15 transactions. A transaction is composed of a sender (from)
+     * and a reciever (to) with their respective credit cards and the quantity exchanged.
+     * 
+     * @returns Array of json.
+     */
+    generateRandomTransaction() {
         let chance = new Chance();
         let nbTransactions = chance.integer({
             min: 5,

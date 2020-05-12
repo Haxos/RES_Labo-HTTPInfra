@@ -5,9 +5,11 @@ For the static content server, we choose to use the Apache httpd server.
 
 We are also using php for dynamic pages generation.
 
-For this lab, we decided to use php-fpm so we can run php in a different container than the web server.
+For this lab, we decided to use php-fpm so we can run php in a different container than the static web server.
 This environment allows easier performance scaling (load-balancing from a single web server across multiple php servers for example) as well as the ability to swap the web server for something like nginx.
 This also makes building images faster because if we change an apache configuration, we don't need to rebuild the php image.
+
+For the dynamic content server, we choose to use ExpressJS (called Express later).
 
 Because we need to use different containers, we decided to use docker-compose to ease the use of launch for many containers with all the ports and volumes bindings.
 To build the different containers, the commandline `docker-compose build` is used.
@@ -44,10 +46,17 @@ The source files of the website is bound through a volume because we don't want 
 Our source files are placed under `./public/`.
 The image set the working directory on `/var/www/html/`.
 
-The port 80 is exposed.
+The port `80` is exposed and can be access on the host via the port `8080`.
 
 ## Composer
 This container is used to run the composer installation with the different dependencies for PHP.
 
 ## PHP-FPM
 PHP-FPM is used to separate the functionalities of PHP and Apache.
+
+### Express
+The Express image is based on NodeJS version ``14.2`` and the Express version used is ``4.17.1``.
+
+The container can be access on port ``3000`` on the container and host machine.
+
+The server generate a random array of JSON representing transactions using ChanceJS ``1.1.5``.
