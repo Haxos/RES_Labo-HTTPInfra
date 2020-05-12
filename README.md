@@ -36,3 +36,5 @@ The server generate a random array of JSON representing transactions using Chanc
 ### Nginx
 Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
 Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
+Warning : there are been problem on the copy and getting a UTF-16 LE encodin instead of UTF-8 which cause problem with Nginx.
+
