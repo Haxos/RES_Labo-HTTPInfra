@@ -32,3 +32,7 @@ The Express image is based on NodeJS version ``14.2`` and the Express version us
 The container can be access on port ``3000`` on the container and host machine.
 
 The server generate a random array of JSON representing transactions using ChanceJS ``1.1.5``.
+
+### Nginx
+Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
+Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`

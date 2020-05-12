@@ -5,11 +5,18 @@ networks:
     frontend:
 
 services: 
+    reverse-proxy:
+        build: ./docker-images/nginx-reverse-proxy
+        container_name: 'reverse-proxy'
+        depends_on: 
+            - apache
+            - express
+        networks: 
+            - backend
+            - frontend
     apache:
         build: ./docker-images/apache
         container_name: 'apache'
-        ports:
-            - "8080:80"
         depends_on: 
             - php-fpm
         networks: 
@@ -20,8 +27,6 @@ services:
     php-fpm:
         build: ./docker-images/php-fpm
         container_name: 'php-fpm'
-        ports: 
-            - "9000:9000"
         networks: 
             - backend
         volumes:
@@ -29,8 +34,6 @@ services:
     express:
         build: ./docker-images/express
         container_name: 'express'
-        ports: 
-            - "3000:3000"
         networks: 
             - backend
         volumes: 
