@@ -35,3 +35,8 @@ The server generate a random array of JSON representing transactions using Chanc
 
 Note that because of problems running npm install with docker on Windows trough VirtualBox (the symlinks doesn't work with node for linux writing to a ntfs filesystem), we needed to use the flag `--no-bin-links`.
 We could also run npm install using node for Windows (outside of docker), but we think it's better to do this step using docker.
+
+### Nginx
+Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
+
+Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
