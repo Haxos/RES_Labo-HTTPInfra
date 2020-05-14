@@ -1,0 +1,61 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Montserrat;
+}
+
+#main {
+    flex-basis: auto;
+    flex-grow: 1;
+}
+
+#footer {
+    padding: 1.75rem 0;
+    background-color: #343a40;
+    color: white;
+}
+
+.home-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    background-image: url('/assets/images/header-network.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center -200px;
+    background-attachment: fixed;
+    color: white;
+    text-align: center;
+    text-shadow: 0 0 6px black;
+}
+
+h1 {
+    font-size: 5.5rem;
+    font-weight: lighter;
+}
+h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.75rem;
+    font-size: 3.5rem;
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: Montserrat, sans-serif;
+}
+
+.anchor {
+    position: relative;
+    top: -70px;
+}
+
+.content {
+    font-family: Martel, serif;
+    font-size: 1.75rem;
+    line-height: 1.75;
+}
+
+.content p {
+    margin-bottom: 2.5rem;
+}
