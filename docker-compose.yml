@@ -4,25 +4,32 @@ networks:
     backend:
     frontend:
 
-services: 
+services:
     apache:
         build: ./docker-images/apache
         container_name: 'apache'
         ports:
             - "8080:80"
-        depends_on: 
+        depends_on:
             - php-fpm
-        networks: 
+        networks:
             - backend
             - frontend
         volumes:
             - ./public:/var/www/html
+    composer:
+        build: ./docker-images/composer
+        container_name: 'composer'
+        volumes:
+            - ./public:/app
     php-fpm:
         build: ./docker-images/php-fpm
         container_name: 'php-fpm'
-        ports: 
+        ports:
             - "9000:9000"
-        networks: 
+        depends_on:
+            - composer
+        networks:
             - backend
         volumes:
             - ./public:/var/www/html
