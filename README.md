@@ -41,4 +41,4 @@ Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.
 
 Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
 
-Warning : there are been problem on the copy and getting a UTF-16 LE encodin instead of UTF-8 which cause problem with Nginx.
+Warning : when copying the config files above from the base image, it was saved in UTF-16 LE encoding. After copying back these files to our image, Nginx had problems parsing them. We had to convert them back to UTF-8.
