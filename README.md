@@ -97,3 +97,16 @@ Because we use docker compose, unlike in the webcasts we don't need to specify m
 ## STEP 4
 
 ## STEP 5
+### Docker-compose
+For these step, we begun to use docker-compose to manage the dynamic reverse proxy configuration because we use these technology professionally.
+But we will still detailed the definitive configuration here.
+
+The docker-compose file version used is the latest (`3`).
+
+#### Containers
+The different container created are the followings :
+- `apache` the apache server used for the dynamic pages. Its image is located in `./docker-images/apache/`.
+- `composer` : container used for running the packet manager composer  for the installation of PHP dependencies. Its image is located in `./docker-images/composer/`.
+- `express` : the expressJS server used for generating dynamic data. Its image is located in `./docker-images/express/`.
+- `php-fpm` : container used for interpreting the PHP scripts. Its image is located in `./docker-images/express/`.
+- `reverse-proxy` : the reverse proxy of our application. Its image is located in `./docker-images/nginx-reverse-proxy/`.
