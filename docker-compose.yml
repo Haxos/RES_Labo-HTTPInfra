@@ -7,7 +7,7 @@ networks:
 services: 
     apache:
         build: ./docker-images/apache
-        container_name: 'apache'
+        # container_name: 'apache'
         depends_on: 
             - php-fpm
         networks:
@@ -22,7 +22,7 @@ services:
             - ./public:/app
     express:
         build: ./docker-images/express
-        container_name: 'express'
+        # container_name: 'express'
         networks:
             - frontend
         volumes:
