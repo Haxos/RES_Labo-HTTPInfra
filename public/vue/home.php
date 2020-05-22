@@ -16,6 +16,8 @@ $pageTitle = 'Home';
     <main id="main">
         <div class="home-banner mb-5">
             <h1>Hello World</h1>
+
+            <div class="position-absolute h-100 w-100" id="particles-js"></div>
         </div>
 
         <div class="container content">
