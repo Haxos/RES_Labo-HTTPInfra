@@ -5,23 +5,13 @@ networks:
     frontend:
 
 services: 
-    reverse-proxy:
-        build: ./docker-images/nginx-reverse-proxy
-        container_name: 'reverse-proxy'
-        depends_on: 
-            - apache
-            - express
-        ports: 
-            - "8080:80"
-        networks: 
-            - backend
-            - frontend
     apache:
         build: ./docker-images/apache
         container_name: 'apache'
         depends_on: 
             - php-fpm
         networks:
+            - frontend
             - backend
         volumes:
             - ./public:/var/www/html
@@ -30,6 +20,13 @@ services:
         container_name: 'composer'
         volumes:
             - ./public:/app
+    express:
+        build: ./docker-images/express
+        container_name: 'express'
+        networks:
+            - frontend
+        volumes:
+            - ./app:/opt/app
     php-fpm:
         build: ./docker-images/php-fpm
         container_name: 'php-fpm'
@@ -39,10 +36,13 @@ services:
             - backend
         volumes:
             - ./public:/var/www/html
-    express:
-        build: ./docker-images/express
-        container_name: 'express'
-        networks:
-            - backend
-        volumes:
-            - ./app:/opt/app
+    reverse-proxy:
+        build: ./docker-images/nginx-reverse-proxy
+        container_name: 'reverse-proxy'
+        depends_on: 
+            - apache
+            - express
+        ports: 
+            - "8080:80"
+        networks: 
+            - frontend
