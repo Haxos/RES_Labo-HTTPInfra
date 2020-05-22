@@ -1,7 +1,7 @@
 # RES Labo-HTTPInfra
 
 ## Introduction
-For the static content server, we choosed to use the Apache httpd server.
+For the static content server, we choose to use the Apache httpd server.
 
 We are also using php for dynamic pages generation.
 
@@ -17,7 +17,9 @@ Finally, for shuting down all the container, the commandline `docker-compose dow
 The different images for Docker are present on `docker-images/`.
 
 ## Docker-compose
-
+Docker-compose is used to manage the different container.
+The ports and volumes binding are realise through the `docker-compose.yml` config but the ports expositions are treated by the Dockerfiles.
+The container dependencies (e.g. running php-fpm before apache) are also treated through docker-compose.
 
 ## Apache
 ### Configuration
@@ -38,9 +40,14 @@ We decided to precise the major and minor version to avoid major breakdown betwe
 The configuration file is directly copied into the Apache image instead of binding via a volume because we wont change its configuration on runtime so there is no interest into binding it in a volume.
 We prefer to rebuild the container if we want to apply a new config.
 
-The source files of the website is binded through a volume because we don't want to shutdown the container if we have modification to do on the different pages.
+The source files of the website is bound through a volume because we don't want to shutdown the container if we have modification to do on the different pages.
 Our source files are placed under `./public/`.
 The image set the working directory on `/var/www/html/`.
 
 The port 80 is exposed.
 
+## Composer
+This container is used to run the composer installation with the different dependencies for PHP.
+
+## PHP-FPM
+PHP-FPM is used to separate the functionalities of PHP and Apache.
