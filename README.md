@@ -96,6 +96,8 @@ Because we use docker compose, unlike in the webcasts we don't need to specify m
 
 ## STEP 4
 
+We can test that the AJAX pass through the reverse proxy by adding a new network on `docker-compose.yml` and adding this network on `reverse-proxy` and `express` and removing all other network on `express`. Like that we have two we have `express` which is isolated on another network and the Apache server cannot communicate directly.
+
 ## STEP 5
 ### Docker-compose
 For these step, we begun to use docker-compose to manage the dynamic reverse proxy configuration because we use these technology professionally.
