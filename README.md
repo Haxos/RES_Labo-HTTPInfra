@@ -11,7 +11,7 @@ This also makes building images faster because if we change an apache configurat
 
 For the dynamic content server, we choose to use ExpressJS (called Express later).
 
-Because we need to use different containers, we decided to use docker-compose to ease the use of launch for many containers with all the ports and volumes bindings.
+Because we need to use different containers, we decided to use docker-compose to ease the use of launch for many containers with all the ports mapping and volumes binding.
 To build the different containers, the commandline `docker-compose build` is used.
 To run the different containers, the commandline `docker-compose up -d` is used.
 Finally, for shuting down all the container, the commandline `docker-compose down` is used.
@@ -23,7 +23,7 @@ The docker version used is the Windows Docker Desktop `19.03.8` and the docker-c
 ## STEP 1
 ### Docker-compose
 Docker-compose is used to manage the different containers.
-The ports and volumes binding are realise through the `docker-compose.yml` config but the ports expositions are treated by the Dockerfiles.
+The ports mapping and volumes binding are realise through the `docker-compose.yml` config but the ports expositions are treated by the Dockerfiles.
 The container dependencies (e.g. running php-fpm before apache) are also treated through docker-compose.
 
 ### Apache
@@ -104,7 +104,7 @@ But we will still detailed the definitive configuration here.
 The docker-compose file version used is the latest (`3`).
 
 #### Containers
-The different container created are the followings :
+The different container (also called *service*) created are the followings :
 - `apache` the apache server used for the dynamic pages. Its image is located in `./docker-images/apache/`.
 - `composer` : container used for running the packet manager composer  for the installation of PHP dependencies. Its image is located in `./docker-images/composer/`.
 - `express` : the expressJS server used for generating dynamic data. Its image is located in `./docker-images/express/`.
@@ -117,10 +117,18 @@ The `backend` network is used for all the containers that need to communicate be
 On the other hand, the `frontend` network is used for all the containers that need to communicate with the client.
 It create a supplementary layer between the containers use by client and the others.
 
-The `php-fpm` container uses only the `backend` network because the client doesn't need to execute PHP script.
-The `reverse-proxy` and `express` containers use the `frontend` container because they need only to communicate with the client and doesn't need others resources given by others containers.
-The `apache` container uses both networks because it need resources given by another container (`php-fpm` in these case) and need to give resources to the client.
-Finally, `composer` doesn't need any network because it's launch as a standalone and doesn't depend on anything.
+- The `php-fpm` container uses only the `backend` network because the client doesn't need to execute PHP script.
+- The `reverse-proxy` and `express` containers use the `frontend` container because they need only to communicate with the client and doesn't need others resources given by others containers.
+- The `apache` container uses both networks because it need resources given by another container (`php-fpm` in these case) and need to give resources to the client.
+- Finally, `composer` doesn't need any network because it's launch as a standalone and doesn't depend on anything.
+
+service | frontend | backend
+--------|----------|--------
+apache | :heavy_check_mark: | :heavy_check_mark:
+composer | :x: | :x:
+express | :heavy_check_mark: | :x:
+php-fpm | :x: | :heavy_check_mark:
+reverse-proxy | :heavy_check_mark: | :x:
 
 #### Dependencies
 Some containers need that certain containers are launch before hand. These dependencies are describe by the instruction `depends_on`.
