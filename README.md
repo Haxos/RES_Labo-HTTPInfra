@@ -146,3 +146,16 @@ reverse-proxy
           +- composer
 ```
 So `reverse-proxy` need to have `express` and `apache` launch before it can be launch. `apache` need `php-fpm` and the later need `composer`.
+
+#### Port mapping
+The only port mapped is the port is `80` on `reverse-proxy` to the host port `8080`.
+
+#### Volume binding
+These are the different volume bounded :
+
+service | host path | container path
+--------|-----------|---------------
+apache  | ./public | /var/www/html
+composer | ./public | /app
+express | ./app | /opt/app
+php-fpm | ./public | /var/www/html
