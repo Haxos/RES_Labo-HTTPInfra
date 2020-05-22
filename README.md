@@ -110,3 +110,15 @@ The different container created are the followings :
 - `express` : the expressJS server used for generating dynamic data. Its image is located in `./docker-images/express/`.
 - `php-fpm` : container used for interpreting the PHP scripts. Its image is located in `./docker-images/express/`.
 - `reverse-proxy` : the reverse proxy of our application. Its image is located in `./docker-images/nginx-reverse-proxy/`.
+
+#### Networks
+Two networks are created : `backend` and `frontend`.
+The `backend` network is used for all the containers that need to communicate between them without having to communicate with the client.
+On the other hand, the `frontend` network is used for all the containers that need to communicate with the client.
+It create a supplementary layer between the containers use by client and the others.
+
+The `php-fpm` container uses only the `backend` network because the client doesn't need to execute PHP script.
+The `reverse-proxy` and `express` containers use the `frontend` container because they need only to communicate with the client and doesn't need others resources given by others containers.
+The `apache` container uses both networks because it need resources given by another container (`php-fpm` in these case) and need to give resources to the client.
+Finally, `composer` doesn't need any network because it's launch as a standalone and doesn't depend on anything.
+
