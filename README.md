@@ -2,8 +2,12 @@
 
 ## Introduction
 For the static content server, we choose to use the Apache httpd server.
+<<<<<<< HEAD
 
 We are also using php for dynamic pages generation.
+=======
+We are also using php for dynamic content generation.
+>>>>>>> b1162f460a659ebf53c451e2aaa9aec73b97270d
 
 For this lab, we decided to use php-fpm so we can run php in a different container than the static web server.
 This environment allows easier performance scaling (load-balancing from a single web server across multiple php servers for example) as well as the ability to swap the web server for something like nginx.
