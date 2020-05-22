@@ -1,2 +1,2 @@
-/public/js/node_modules/*
+/app/node_modules/
 /public/vendor/
