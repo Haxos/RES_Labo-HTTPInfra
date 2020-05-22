@@ -23,7 +23,6 @@ services:
             - php-fpm
         networks:
             - backend
-            - frontend
         volumes:
             - ./public:/var/www/html
     composer:
