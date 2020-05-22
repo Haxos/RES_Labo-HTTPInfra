@@ -59,3 +59,13 @@ h1, h2, h3, h4, h5 {
 .content p {
     margin-bottom: 2.5rem;
 }
+
+.transactions-list .transaction-item .transaction-from {
+    text-align: left;
+}
+.transactions-list .transaction-item .transaction-amount {
+    text-align: center;
+}
+.transactions-list .transaction-item .transaction-to {
+    text-align: right;
+}

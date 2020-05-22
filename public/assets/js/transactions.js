@@ -1,29 +1,32 @@
 $(function() {
     console.log("Loading transactions");
 
-    function loadTransactions() {
-        $.getJSON("/api", function(transactions) {
-            console.log(transactions);
-            let message = "";
+    let container = $('#transactionsDisplayer');
+    let baseTemplate = $('#transactionsDisplayer').find('template')[0];
 
-            if(transactions.length == 0) {
-                message = "No transactions";
-            } else {
-                for (let i = 0; i < transactions.length; i++) {
-                    message += transactions[i].from.firstName 
-                    + " " + transactions[i].from.lastName 
-                    + " -- " + transactions[i].quantity
-                    + " --> " + transactions[i].to.firstName 
-                    + " " + transactions[i].to.lastName 
-                    + " || "
-                }
-                
-            }
-            
-            $(".displayer").text(message);
-        })
+    function refreshTransactions()
+    {
+        $.getJSON("/api", function(transactions) {
+            container.html('');
+            displayTransactions(transactions);
+        });
     }
 
-    loadTransactions();
-    setInterval(loadTransactions, 2000);
+    function displayTransactions(transactions)
+    {
+        for (let i in transactions)
+        {
+            let newNode = $(baseTemplate.content.cloneNode(true));
+            newNode.find('[data-from-first-name]').text(transactions[i].from.firstName);
+            newNode.find('[data-from-last-name]').text(transactions[i].from.lastName);
+            newNode.find('[data-to-first-name]').text(transactions[i].to.firstName);
+            newNode.find('[data-to-last-name]').text(transactions[i].to.lastName);
+            newNode.find('[data-quantity]').text(transactions[i].quantity);
+
+            container.append(newNode);
+        }
+    }
+
+    refreshTransactions();
+    setInterval(refreshTransactions, 2000);
 });
