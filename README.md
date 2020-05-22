@@ -122,3 +122,19 @@ The `reverse-proxy` and `express` containers use the `frontend` container becaus
 The `apache` container uses both networks because it need resources given by another container (`php-fpm` in these case) and need to give resources to the client.
 Finally, `composer` doesn't need any network because it's launch as a standalone and doesn't depend on anything.
 
+#### Dependencies
+Some containers need that certain containers are launch before hand. These dependencies are describe by the instruction `depends_on`.
+
+The tree is as follow :
+```
+reverse-proxy
+  |
+  +- express
+  |
+  +- apache
+      |
+      +- php-fpm
+          |
+          +- composer
+```
+So `reverse-proxy` need to have `express` and `apache` launch before it can be launch. `apache` need `php-fpm` and the later need `composer`.
