@@ -18,13 +18,16 @@ Finally, for shuting down all the container, the commandline `docker-compose dow
 
 The different images for Docker are present on `docker-images/`.
 
-## Docker-compose
-Docker-compose is used to manage the different container.
+The docker version used is the Windows Docker Desktop `19.03.8` and the docker-compose version is the `1.25.5`.
+
+## STEP 1
+### Docker-compose
+Docker-compose is used to manage the different containers.
 The ports and volumes binding are realise through the `docker-compose.yml` config but the ports expositions are treated by the Dockerfiles.
 The container dependencies (e.g. running php-fpm before apache) are also treated through docker-compose.
 
-## Apache
-### Configuration
+### Apache
+#### Configuration
 To get a default apache httpd.conf, the following command has been used : `docker run --rm httpd:2.4 cat /usr/local/apache2/conf/httpd.conf > docker-images/apache/httpd.conf`.
 
 In `httpd.conf`, the following operations have been executed:
@@ -35,7 +38,7 @@ In `httpd.conf`, the following operations have been executed:
 - In `DocumentRoot` and `<Directory>`, the path `/usr/local/apache2/htdocs/` has been changed into the current used path by the server `/var/www/html/`.
 - In `<IfModule dir_module>`, `DirectoryIndex index.html` has been changed to `DirectoryIndex index.php index.html`. This will make sure that Apache try to serve the `index.php` file instead of `index.html` when the URI matches a directory.
 
-### Dockerfile
+#### Dockerfile
 The Apache image is based on the image `httpd:2.4`.
 We decided to precise the major and minor version to avoid major breakdown between versions.
 
@@ -47,26 +50,32 @@ Our source files are placed under `./public/`.
 The image set the working directory on `/var/www/html/`.
 
 The port `80` is exposed and can be access on the host via the port `8080`.
+This is no longer the case after the step 3 realize on the branch `feature-feature-ngnix-reverse-proxy`.
+Then it's access through the reverse proxy on `http://<docker_ip>:8080/`.
 
-## Composer
+### Composer
 This container is used to run the composer installation with the different dependencies for PHP.
 
-## PHP-FPM
+### PHP-FPM
 PHP-FPM is used to separate the functionalities of PHP and Apache.
 
+## STEP 2
 ### Express
 The Express image is based on NodeJS version ``14.2`` and the Express version used is ``4.17.1``.
 
 The container can be access on port ``3000`` on the container and host machine.
+This is no longer the case after the step 3 realize on the branch `feature-feature-ngnix-reverse-proxy`.
+Then it's access through the reverse proxy on `http://<docker_ip>:8080/api`.
 
 The server generate a random array of JSON representing transactions using ChanceJS ``1.1.5``.
 
 Note that because of problems running npm install with docker on Windows trough VirtualBox (the symlinks doesn't work with node for linux writing to a ntfs filesystem), we needed to use the flag `--no-bin-links`.
 We could also run npm install using node for Windows (outside of docker), but we think it's better to do this step using docker.
 
+## STEP 3
 ### Nginx
 For the reverse proxy part, we decided to use Nginx instead of Apache because of the following reasons:
-- It has better peformance
+- It has better performance
 - It was made for being a reverse proxy so the configuration is simpler
 - We already had experiences with Apache but wanted to test Nginx
 
@@ -84,3 +93,7 @@ Warning : when copying the config files above from the base image, it was saved 
 We removed some ports mapping from our docker-compose.yml file so that we cannot access our Apache and Express containers without going trough the reverse proxy.
 
 Because we use docker compose, unlike in the webcasts we don't need to specify manually the ip addresses of the Apache and Express containers. In our config files we use the hostnames assigned by docker-compose instead, which gives us more robustness.
+
+## STEP 4
+
+## STEP 5
