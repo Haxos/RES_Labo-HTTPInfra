@@ -37,8 +37,13 @@ Note that because of problems running npm install with docker on Windows trough 
 We could also run npm install using node for Windows (outside of docker), but we think it's better to do this step using docker.
 
 ### Nginx
-Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
+For the reverse proxy part, we decided to use Nginx instead of Apache because of the following reasons:
+- It has better peformance
+- It was made for being a reverse proxy so the configuration is simpler
+- We already had experiences with Apache but wanted to test Nginx
 
-Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
+We had to edit the default config files using the following commands:
+- Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
+- Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
 
 Warning : when copying the config files above from the base image, it was saved in UTF-16 LE encoding. After copying back these files to our image, Nginx had problems parsing them. We had to convert them back to UTF-8.
