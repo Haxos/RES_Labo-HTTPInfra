@@ -95,6 +95,25 @@ We removed some ports mapping from our docker-compose.yml file so that we cannot
 Because we use docker compose, unlike in the webcasts we don't need to specify manually the ip addresses of the Apache and Express containers. In our config files we use the hostnames assigned by docker-compose instead, which gives us more robustness.
 
 ## STEP 4
+### JQuery
+For this part, we used a self-hosted minified version of jquery (we were already using it for our Bootstrap theme).
+
+We only had to write a few lines of Javascript in `public/assets/js/transactions.js` that are doing the following things:
+- Call the api using jQuery
+- Clear the previous results (we don't want them to stack infinitely)
+- Loop over the results
+- Create a new node by duplicating an html template
+- Fill the node with the data from the api
+
+### Reverse proxy and CORS
+In this environment, the Express api is behind our reverse proxy and his hostname (ip and port) is the same as the webpage.
+
+There would be an issue if the api wasn't using the same hostname as the webpage, this issue is related to CORS (Cross Origin Resource Sharing).
+This is a security measure at the browser level: by default the browser refuses to perform any AJAX call (as well as requests to some other resources) to a hostname that is not the same as the webpage's one.
+This reduces the risk of performing a request to a compromised source or a compromised script on the webpage loading data from a server owned by the attacker.
+
+There would be an other way to allow the AJAX call even if the api is on a different hostname: we could configure our apache server to send the HTTP header `Access-Control-Allow-Origin: http://<our-docker-ip>:3000` along with the webpage.
+This would tell the user browser that the webpage trusts our Express server. The browser should then allow any script to perform requests to Express.
 
 ## STEP 5
 ### Docker-compose
