@@ -61,4 +61,5 @@ The container can be access on port ``3000`` on the container and host machine.
 
 The server generate a random array of JSON representing transactions using ChanceJS ``1.1.5``.
 
-Note that because of problems running npm install with docker on Windows trough VirtualBox (the symlinks doesn't work with npm on linux writing to a ntfs filesystem), we needed to use the flag `--no-bin-links`.
+Note that because of problems running npm install with docker on Windows trough VirtualBox (the symlinks doesn't work with node for linux writing to a ntfs filesystem), we needed to use the flag `--no-bin-links`.
+We could also run npm install using node for Windows (outside of docker), but we think it's better to do this step using docker.
