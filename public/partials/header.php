@@ -14,6 +14,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#section-2">Section 2</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#transactions">Ajax</a>
+                </li>
             </ul>
         </div>
     </nav>
