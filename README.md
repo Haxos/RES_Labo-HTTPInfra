@@ -180,3 +180,11 @@ apache  | ./public | /var/www/html
 composer | ./public | /app
 express | ./app | /opt/app
 php-fpm | ./public | /var/www/html
+
+
+## Load balancing: multiple server nodes
+With docker-compose, we just need to use the `--scale <service>=<number>` with `<service>` been the name of the service and `<number>` the number of instance to launch.
+
+For instance, by launching the command `docker-compose up --scale express=2 --scale apache=3` will launch the 3 instance of `express` and two instance of `apache`. By reloading the page main page (`http://<docker_ip>:8080/`), we can see on the terminal that the load is shared between the different instances of apache.
+
+Warning : to be able to use the flag `--scale`, we have to NOT use the operation `container_name` on the container been scaled because it will have conflict with the same name use by many container.
