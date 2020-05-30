@@ -4,6 +4,8 @@ ENV DIRPATH /var/www/html
 
 RUN apt-get update && apt-get install -y \
         libicu-dev \
+        zip \
+        unzip \
     && docker-php-ext-install intl
 
 COPY --from=composer:1.10 /usr/bin/composer /usr/local/bin/composer
