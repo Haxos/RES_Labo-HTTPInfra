@@ -1,0 +1,101 @@
+/**
+ * Typography
+ */
+html {
+    font-family: sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/**
+ * Layout
+ */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 0 -1rem;
+}
+.row > * {
+    padding: 0 1rem 2rem 1rem;
+}
+
+/**
+ * Generic components and helpers
+ */
+.card {
+    padding: 1rem;
+    border: 1px solid #CACACA;
+    border-radius: 0.25rem;
+}
+.card .card-full-width {
+    margin: 0 -1rem;
+}
+
+ul.list-unstyled {
+    padding: 0;
+    list-style-type: none;
+}
+
+.text-muted {
+    color: #555;
+}
+
+table.info-table {
+    margin: 1rem 0;
+}
+table.info-table > tbody > tr > td {
+    padding: 0.4rem 0.5rem;
+}
+table.info-table > tbody > tr > td:first-child {
+    padding-left: 0;
+    color: #555;
+}
+
+/**
+ * Images list styles
+ */
+.images-list .image {
+    width: 33.333%;
+}
+@media (max-width: 800px) {
+    .images-list .image {
+        width: 100%;
+    }
+}
+
+.images-list .image .actions > * {
+    padding-bottom: 0;
+}
+
+/**
+ * Containers list styles
+ */
+.containers-images-list .image {
+    width: 50%;
+}
+@media (max-width: 800px) {
+    .containers-images-list .image {
+        width: 100%;
+    }
+}
+
+.containers-list {
+    border-bottom: 1px solid #CACACA;
+}
+.containers-list .container {
+    padding: 0 1rem;
+    border-top: 1px solid #CACACA;
+    padding-bottom: 1rem;
+}
+.containers-list .container .actions > * {
+    padding-bottom: 0;
+}

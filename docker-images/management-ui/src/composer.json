@@ -2,7 +2,9 @@
     "type": "project",
     "require": {
         "klein/klein": "^2.1",
-        "docker-php/docker-php": "^2.0"
+        "docker-php/docker-php": "^2.0",
+        "jane-php/open-api-runtime": "<=4.2",
+        "nesbot/carbon": "^2.35"
     },
     "autoload": {
         "psr-4": {
