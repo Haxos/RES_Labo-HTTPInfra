@@ -4,7 +4,7 @@ namespace MgmtUi\Controllers;
 
 use MgmtUi\Base\Controller;
 
-class Home extends Controller
+class HomeController extends Controller
 {
     public function home()
     {

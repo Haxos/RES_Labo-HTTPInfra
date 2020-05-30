@@ -4,15 +4,13 @@ namespace MgmtUi\Base;
 
 abstract class Controller
 {
-    public static function __callStatic($name, $arguments)
+    public static function call($name, ...$arguments)
     {
-        $instance = new static();
-
-        return $instance->$name(...$arguments);
+        return (new static)->$name(...$arguments);
     }
 
     protected function renderView($viewName)
     {
-        require __DIR__ . '../Views/' . $viewName . '.php';
+        require __DIR__ . '/../Views/' . $viewName . '.php';
     }
 }
