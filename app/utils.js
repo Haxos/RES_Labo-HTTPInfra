@@ -40,6 +40,8 @@ export default {
             });
         }
 
+        console.log("random transaction generated");
+
         return transactions;
     }
 }

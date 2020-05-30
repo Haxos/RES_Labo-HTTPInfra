@@ -183,8 +183,45 @@ php-fpm | ./public | /var/www/html
 
 
 ## Load balancing: multiple server nodes
+### Nginx
+On the Nginx config for the proxy `proxy.conf`, we added the `upstream` directive and changed the `proxy_pass` to refer to the upstream.
+```
+upstream docker-apache {
+    server apache:80;
+}
+
+upstream docker-express {
+    server express:3000;
+}
+
+server { ## reverse proxy
+    listen       80;
+    server_name  demo.res.ch;
+
+    access_log  /var/log/nginx/host.access.log  main;
+
+    ## redirect
+    location / {
+        proxy_pass http://docker-apache;
+    }
+
+    location /api {
+        proxy_pass http://docker-express;
+    }
+}
+```
+
+### Docker-compose
 With docker-compose, we just need to use the `--scale <service>=<number>` with `<service>` been the name of the service and `<number>` the number of instance to launch.
 
-For instance, by launching the command `docker-compose up --scale express=2 --scale apache=3` will launch the 3 instance of `express` and two instance of `apache`. By reloading the page main page (`http://<docker_ip>:8080/`), we can see on the terminal that the load is shared between the different instances of apache.
+For instance, by launching the command `docker-compose up --scale express=2 --scale apache=3` will launch the 3 instance of `express` and two instance of `apache`. By reloading the page main page (`http://<docker_ip>:8080/`), we can see on the terminal that the load is shared between the different instances of apache. 
+We can also detach the services with `-d` as follow `docker-compose up -d --scale express=2 --scale apache=3` then use `docker-compose logs` to check the logs of all services.
 
 Warning : to be able to use the flag `--scale`, we have to NOT use the operation `container_name` on the container been scaled because it will have conflict with the same name use by many container.
+
+## Dynamic cluster management
+To add or remove nodes we use the command `docker-compose scale <service>=<number>` with `<service>` been the name of the service and `<number>` the total number of instance.
+
+For instance, if we want to have a total of 4 `apache` services, we can run `docker-compose scale apache=4`. Afterward we want to have 2 `apache` services and 2 `express` services then we run the command `docker-compose scale apache=2 express=2`. It will scale down the `apache` service and scale up the `express` service.
+
+The downsides of this method is that we need to know how many services (total number) we need, we cannot just say we add one more `apache` and this command is deprecated with docker-compose 3 and the command suggested by the official documentation, `docker-compose up --scale <service>=<number>`, has a different behavior and will restart all services.
