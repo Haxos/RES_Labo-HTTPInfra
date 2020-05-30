@@ -73,22 +73,22 @@ Note that because of problems running npm install with docker on Windows trough 
 We could also run npm install using node for Windows (outside of docker), but we think it's better to do this step using docker.
 
 ## STEP 3
-### Nginx
-For the reverse proxy part, we decided to use Nginx instead of Apache because of the following reasons:
+### NGINX
+For the reverse proxy part, we decided to use NGINX instead of Apache because of the following reasons:
 - It has better performance
 - It was made for being a reverse proxy so the configuration is simpler
-- We already had experiences with Apache but wanted to test Nginx
+- We already had experiences with Apache but wanted to test NGINX
 
 We had to edit the default config files using the following commands:
-- Get the default Nginx config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
-- Get the default Nginx proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
+- Get the default NGINX config : `docker run --rm nginx:1.17 cat /etc/nginx/nginx.conf > docker-images/nginx-reverse-proxy/nginx.conf`.
+- Get the default NGINX proxy : `docker run --rm nginx:1.17 cat /etc/nginx/conf.d/default.conf > docker-images/nginx-reverse-proxy/proxy.conf`
 
 We didn't modify anything in nginx.conf but we decided to version it anyway because it may be useful to add some global directives here in the future.
 
 In the proxy.conf file, we added 2 `location` nodes (one for Apache and one for Express). Each node contains a `proxy_pass` directive that forwards requests and responses between the client and the appropriate container.
-Note that with Nginx there is no need to define the reverse path for the response.
+Note that with NGINX there is no need to define the reverse path for the response.
 
-Warning : when copying the config files above from the base image, it was saved in UTF-16 LE encoding. After copying back these files to our image, Nginx had problems parsing them. We had to convert them back to UTF-8.
+Warning : when copying the config files above from the base image, it was saved in UTF-16 LE encoding. After copying back these files to our image, NGINX had problems parsing them. We had to convert them back to UTF-8.
 
 We removed some ports mapping from our docker-compose.yml file so that we cannot access our Apache and Express containers without going trough the reverse proxy.
 
@@ -183,8 +183,8 @@ php-fpm | ./public | /var/www/html
 
 
 ## Load balancing: multiple server nodes
-### Nginx
-On the Nginx config for the proxy `proxy.conf`, we added the `upstream` directive and changed the `proxy_pass` to refer to the upstream.
+### NGINX
+On the NGINX config for the proxy `proxy.conf`, we added the `upstream` directive and changed the `proxy_pass` to refer to the upstream.
 ```
 upstream docker-apache {
     server apache:80;
@@ -218,6 +218,24 @@ For instance, by launching the command `docker-compose up --scale express=2 --sc
 We can also detach the services with `-d` as follow `docker-compose up -d --scale express=2 --scale apache=3` then use `docker-compose logs` to check the logs of all services.
 
 Warning : to be able to use the flag `--scale`, we have to NOT use the operation `container_name` on the container been scaled because it will have conflict with the same name use by many container.
+
+## Load balancing: round-robin vs sticky sessions
+NGINX, with the upstreams, is by default in round-robin.
+We can add `ip_hash` on the upstreams to have a sticky session or also called session persistance.
+
+```
+upstream docker-apache {
+    ip_hash;
+    server apache:80;
+}
+
+upstream docker-express {
+    ip_hash;
+    server express:3000;
+}
+```
+
+We used `ip_hash` because we are on the default version of NGINX. The best way is to use the directive `sticky route $route_cookie $route_uri;` but it requires to have NGINX Plus.
 
 ## Dynamic cluster management
 To add or remove nodes we use the command `docker-compose scale <service>=<number>` with `<service>` been the name of the service and `<number>` the total number of instance.
