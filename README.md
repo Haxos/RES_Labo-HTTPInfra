@@ -183,6 +183,35 @@ php-fpm | ./public | /var/www/html
 
 
 ## Load balancing: multiple server nodes
+### Nginx
+On the Nginx config for the proxy `proxy.conf`, we added the `upstream` directive and changed the `proxy_pass` to refer to the upstream.
+```
+upstream docker-apache {
+    server apache:80;
+}
+
+upstream docker-express {
+    server express:3000;
+}
+
+server { ## reverse proxy
+    listen       80;
+    server_name  demo.res.ch;
+
+    access_log  /var/log/nginx/host.access.log  main;
+
+    ## redirect
+    location / {
+        proxy_pass http://docker-apache;
+    }
+
+    location /api {
+        proxy_pass http://docker-express;
+    }
+}
+```
+
+### Docker-compose
 With docker-compose, we just need to use the `--scale <service>=<number>` with `<service>` been the name of the service and `<number>` the number of instance to launch.
 
 For instance, by launching the command `docker-compose up --scale express=2 --scale apache=3` will launch the 3 instance of `express` and two instance of `apache`. By reloading the page main page (`http://<docker_ip>:8080/`), we can see on the terminal that the load is shared between the different instances of apache. 
