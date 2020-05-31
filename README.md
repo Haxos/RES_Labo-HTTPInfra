@@ -238,8 +238,26 @@ upstream docker-express {
 We used `ip_hash` because we are on the default version of NGINX. The best way is to use the directive `sticky route $route_cookie $route_uri;` but it requires to have NGINX Plus.
 
 ## Dynamic cluster management
-To add or remove nodes we use the command `docker-compose scale <service>=<number>` with `<service>` been the name of the service and `<number>` the total number of instance.
+To add or remove nodes we use the command `docker-compose scale <service>=<number>` with `<service>` being the name of the service and `<number>` the total amount of instances.
 
-For instance, if we want to have a total of 4 `apache` services, we can run `docker-compose scale apache=4`. Afterward we want to have 2 `apache` services and 2 `express` services then we run the command `docker-compose scale apache=2 express=2`. It will scale down the `apache` service and scale up the `express` service.
+For instance, if we want to have a total of 4 `apache` services, we can run `docker-compose scale apache=4`. Afterward, if we want to have 2 `apache` services and 2 `express` services then we run the command `docker-compose scale apache=2 express=2`. It will scale down the `apache` service and scale up the `express` service.
 
-The downsides of this method is that we need to know how many services (total number) we need, we cannot just say we add one more `apache` and this command is deprecated with docker-compose 3 and the command suggested by the official documentation, `docker-compose up --scale <service>=<number>`, has a different behavior and will restart all services.
+The downsides of this method are that we need to know how many services (total number) we need, we cannot just say we want to add one more `apache`. This command is also deprecated with docker-compose 3 and the command suggested by the official documentation, `docker-compose up --scale <service>=<number>`, has a different behavior and will restart all running services.
+
+## Management UI
+We've made a simple management UI to be able to suspend, resume, restart or delete containers.
+
+As we both are not familiar with ExpressJS, we decided to use a php package (and it was fun to check if it realy works).
+
+Contrary to our first php-fpm container, we decided here to make a self-contained container without external dependencies or volumes. This means that the sources are embedded inside the image, wich is much more annoying to develop because testing it requires to rebuild the image.
+
+The only thing we have to share is the docker socket on the docker VM in order for the application on the container to be able to interact with docker.
+
+Our UI is able to do the following operations:
+- List images and show diverse info such as creation date and image size
+- List containers and show diverse info such as status or ip addresses
+- Create a container from an image. This is not realy usable as is, because it doesn't do all what docker-compose does such as volumes and network binding, hostnames assignment, etc. This would require much more work to have it working
+- Pause a container
+- Resume (unpause) a paused container
+- Restart a container
+- Delete a container (stopping it first)
