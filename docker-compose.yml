@@ -1,0 +1,56 @@
+version: '3'
+
+networks: 
+    backend:
+    frontend:
+
+services: 
+    apache:
+        build: ./docker-images/apache
+        # container_name: 'apache'
+        depends_on:
+            - php-fpm
+        networks:
+            - frontend
+            - backend
+        volumes:
+            - ./public:/var/www/html
+    composer:
+        build: ./docker-images/composer
+        container_name: 'composer'
+        volumes:
+            - ./public:/app
+    express:
+        build: ./docker-images/express
+        # container_name: 'express'
+        networks:
+            - frontend
+        volumes:
+            - ./app:/opt/app
+    management-ui:
+        build: ./docker-images/management-ui
+        container_name: 'management-ui'
+        networks:
+            - frontend
+        volumes:
+            - //var/run/docker.sock:/var/run/docker.sock
+    php-fpm:
+        build: ./docker-images/php-fpm
+        # container_name: 'php-fpm'
+        depends_on:
+            - composer
+        networks:
+            - backend
+        volumes:
+            - ./public:/var/www/html
+    reverse-proxy:
+        build: ./docker-images/nginx-reverse-proxy
+        container_name: 'reverse-proxy'
+        depends_on: 
+            - apache
+            - express
+            - management-ui
+        ports: 
+            - "8080:80"
+        networks: 
+            - frontend

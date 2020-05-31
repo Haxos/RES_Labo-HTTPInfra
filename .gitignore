@@ -1,0 +1,3 @@
+/app/node_modules/
+/public/vendor/
+/docker-images/management-ui/src/vendor/
