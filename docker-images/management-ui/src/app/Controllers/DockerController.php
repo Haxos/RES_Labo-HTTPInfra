@@ -31,7 +31,10 @@ class DockerController extends Controller
 
     public function deleteContainer(Request $request)
     {
-        Docker::create()->containerDelete($request->containerId);
+        $docker = Docker::create();
+
+        $docker->containerStop($request->containerId);
+        $docker->containerDelete($request->containerId);
 
         return $this->redirect('/');
     }
